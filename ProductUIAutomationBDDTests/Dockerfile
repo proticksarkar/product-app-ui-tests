@@ -15,4 +15,5 @@ RUN dotnet build "ProductUIAutomationBDDTests.csproj" -c Release -o /app/build
 
 FROM build AS ProductUIAutomationBDDTests
 WORKDIR /src/ProductUIAutomationBDDTests
-CMD ["dotnet", "test"]
+RUN ["chmod", "+x", "../Scripts/wait_and_run.sh" ]
+ENTRYPOINT ["../Scripts/wait_and_run.sh"]
