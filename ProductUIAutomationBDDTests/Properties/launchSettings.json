@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "ProductUIAutomationBDDTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "local"
+      }
+    },
+    "Docker": {
+      "commandName": "Project"
+    }
+  }
+}
