@@ -1,0 +1,83 @@
+version: '3.4'
+services:
+  product_api:
+    image: product_api
+    container_name: productapi
+    build:
+      context: .
+      dockerfile: ProductAPI/Dockerfile
+    restart: on-failure      
+    ports:
+      - 5000:8001
+    depends_on:
+      - sql_db
+    networks:
+      - product_network
+
+  product_webapp:
+    image: product_webapp
+    container_name: productwebapp
+    build:
+      context: .
+      dockerfile: ProductWebApp/Dockerfile
+    restart: on-failure      
+    ports:
+      - 5001:8000
+    depends_on: 
+      - product_api
+    networks: 
+      - product_network
+
+  sql_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "Password123"
+      ACCEPT_EULA: "Y"
+    container_name: sqlserver
+    hostname: sqlserver
+    ports:
+    - "1433:1433"
+    networks:
+      - product_network
+      
+  product_test:
+    image: product_test
+    container_name: producttest
+    build:
+      context: .
+      dockerfile: ProductUIAutomationBDDTests/Dockerfile
+    restart: on-failure
+    depends_on:
+      - product_api
+      - selenium-hub
+    environment:
+      - ASPNETCORE_ENVIRONMENT=remote
+    networks:
+      - product_network
+
+  node-docker:
+    image: selenium/node-docker:4.1.1-20211217
+    volumes:
+      - ./assets:/opt/selenium/assets
+      - ./GridConfig/config.toml:/opt/bin/config.toml
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    networks:
+      - product_network
+
+  selenium-hub:
+    image: selenium/hub:4.1.1-20211217
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    networks:
+      - product_network
+
+networks: 
+   product_network:

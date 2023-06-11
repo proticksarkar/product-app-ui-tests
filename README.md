@@ -1,1 +1,1 @@
-# product-app-ui-tests
+This repository holds the Web UI Automation Tests to test Product App.
