@@ -13,7 +13,7 @@ docker-compose -p "$project" build
 
 docker-compose -p "$project" up
 
-docker-compose -p "$project" up -d product_api product_webapp sql_db node-docker selenium-hub
+docker-compose -p "$project" up -d product_api product_webapp sql_db chrome edge firefox chrome_video edge_video firefox_video selenium-hub
 
 docker-compose -p "$project" up --no-deps product_test
 
