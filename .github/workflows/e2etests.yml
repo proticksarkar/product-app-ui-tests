@@ -1,4 +1,4 @@
-name: Selenium E2E Tests CI
+name: E2E UI Tests CI
 
 on:
   push:
@@ -16,8 +16,13 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Build the script file
       run: |
         echo --- Running Tests ---
         sh ./Scripts/run.sh
+    - name: Publish report as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: SpecFlowReport
+        path: ./reports
